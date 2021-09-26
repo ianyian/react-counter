@@ -2,53 +2,46 @@ import React, { Component } from "react";
 
 // React.Fragment = single Div in HTML
 class Counter extends React.Component {
-  state = {
-    count: 0,
-    imageurl: "https://picsum.photos/200",
-    tags: ["tag1", "tag2", "tag3"],
-  };
-
-  styles = {
-    fontSize: 80,
-    fontWeight: "bold",
-  };
-
-  renderTag() {
-    if (this.state.tags.length === 0) return <p>There is no tags !</p>;
-
-    return (
-      <ul>
-        <li>
-          {this.state.tags.map((tag) => (
-            <li key={tag}>{tag}</li>
-          ))}
-        </li>
-      </ul>
-    );
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.counter.value != this.props.counter.value) {
+      console.log("prevProps", prevProps);
+      console.log("prevState", prevState);
+    }
   }
 
   render() {
+    console.log("Counter.rendered.");
     return (
       <div>
-        <span className={this.getBadgeClasses()}>{this.formatCount()}</span>
-        <button className="btn btn-secondary btn-sm">Increment</button>
-        <div>{this.renderTag()}</div>
+        <span> {this.formatCount()}</span>
+        <button
+          onClick={() => this.props.onIncrement(this.props.counter)}
+          className="btn btn-secondary btn-sm"
+        >
+          Increment
+        </button>
+        <button
+          onClick={() => this.props.onDelete(this.props.counter.id)}
+          className="btn btn-danger btn-sm m2"
+        >
+          Delete
+        </button>
       </div>
     );
   }
 
   getBadgeClasses() {
     let classes = "badge m2- badge-";
-    classes += this.state.count === 0 ? "warning" : "primary";
+    classes += this.props.counter.value === 0 ? "warning" : "primary";
     return classes;
   }
 
   formatCount() {
-    const { count } = this.state;
+    const { value } = this.props.counter;
     // allow to return jsx syntax
-    //return count == 0 ? <h1>Zero</h1> : count;
-
-    return count == 0 ? "Zero" : count;
+    //return value == 0 ? <h1>Zero</h1> : value;
+    //return value;
+    return value == 0 ? "Zero" : value;
   }
 }
 
